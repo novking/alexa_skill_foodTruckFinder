@@ -1,0 +1,30 @@
+{
+  "name": "foodtruckfinder",
+  "version": "1.0.0",
+  "description": "this is a skill that can find food truck location based on seattlefoodtruck.com",
+  "main": "index.js",
+  "dependencies": {
+    "alexa-sdk": "^1.0.7",
+    "sleep": "^5.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/novking/alexa_skill_foodTruckFinder.git"
+  },
+  "keywords": [
+    "alexa",
+    "echo",
+    "skill",
+    "food_truck"
+  ],
+  "author": "Yiming (Aaron)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/novking/alexa_skill_foodTruckFinder/issues"
+  },
+  "homepage": "https://github.com/novking/alexa_skill_foodTruckFinder#readme"
+}
