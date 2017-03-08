@@ -24,7 +24,7 @@ var FoodTruckLists = {
     "burgersFoodTruckList": ["Skillet Street Food", "Dante's Inferno Dogs", "Off The Rez", "Bread And Circuses"]
 };
 
-const cannotFindLocation = 'Sorry, we cannot find the food truck location based on seattle food truck dot com. Please chose another one';
+const cannotFindLocation = 'Sorry, we cannot find the food truck location because the food truck doesn\'t provide their location online right now. Please chose another one';
 
 const welcomeMesssage = "Yo Yo Yo, you hungry? Let's find a food truck for you. ";
 const repromt_weclomeMessage = "You can ask for cuisine list, food truck list of a particular cuisine, or location of a particular food truck";
@@ -64,137 +64,132 @@ var startingStateHandlers = {
         console.log(this.handler.state);
 
         var cuisineSlot = this.event.request.intent.slots.cuisine.value;
+        if (cuisineSlot == undefined){
+            this.emit(":ask", "please provide a cuisine style you like", "please provide a cuisine style, such as: give me a list of Indian food trucks");
+        }
         var cuisineCustomerPicked = cuisineSlot.toString().toLowerCase() + "FoodTruckList";
         //console.log(cuisineCustomerPicked);
-        var targetFoodTruckList = FoodTruckLists[cuisineCustomerPicked];
+        if(FoodTruckLists[cuisineCustomerPicked]){
+            var targetFoodTruckList = FoodTruckLists[cuisineCustomerPicked];
 
-        var repromt_getTruckList;
-        var output;
-        var outputResult;
-        if (targetFoodTruckList.length < 3) {
-            outputResult = targetFoodTruckList.toString();
-            this.attributes['numberOfFoodTrucksHasGiven'] = targetFoodTruckList.length;
-            repromt_getTruckList = "You can pick a food truck or get other cuisine food truck lists.";
+            var repromt_getTruckList;
+            var output;
+            var outputResult;
+            if (targetFoodTruckList.length < 3) {
+                outputResult = targetFoodTruckList.toString();
+                this.attributes['numberOfFoodTrucksHasGiven'] = targetFoodTruckList.length;
+                repromt_getTruckList = "You can pick a food truck or get other cuisine food truck lists.";
 
-            if (targetFoodTruckList.length===1){
-                output = "There is only " + targetFoodTruckList.length.toString() + " food truck gave us the valid address information. It called: " + outputResult;
+                if (targetFoodTruckList.length===1){
+                    output = "There is only " + targetFoodTruckList.length.toString() + " food truck gave us the valid address information. It called: " + outputResult;
+                }
+                else{
+                    output = "There are only " + targetFoodTruckList.length.toString() + " food trucks gave us the valid address information. There are: " + outputResult;
+                }
+            } else {
+                outputResult = targetFoodTruckList.slice(0, 3).toString();
+                this.attributes['numberOfFoodTrucksHasGiven'] = 3; // to track how many food trucks that has already been told to customer
+                output = "Food Trucks fit your taste are: " + outputResult;
+                repromt_getTruckList = "You can get more food truck list by saying:'Give me more food trucks info', or find out a food truck location by saying:'Where is your chonse food truck?'";
             }
-            else{
-                output = "There are only " + targetFoodTruckList.length.toString() + " food trucks gave us the valid address information. There are: " + outputResult;
-            }
-        } else {
-            outputResult = targetFoodTruckList.slice(0, 3).toString();
-            this.attributes['numberOfFoodTrucksHasGiven'] = 3; // to track how many food trucks that has already been told to customer
-            output = "Food Trucks fit your taste are: " + outputResult;
-            repromt_getTruckList = "You can get more food truck list by saying:'Give me more food trucks info', or find out a food truck location by saying:'Where is your chonse food truck?'";
+
+            var cardTitle = "Food Truck Names";
+            var cardContent = outputResult;
+            this.attributes['cuisineCustomerPicked'] = cuisineCustomerPicked;
+            this.attributes['repeatFoodTruckList'] = outputResult;
+            this.handler.state = states.TRUCKLISTMODE;
+            this.emit(':askWithCard', output, repromt_getTruckList, cardTitle, cardContent);
+
+        } else{
+            this.emit(":ask", "sorry, i don't get what you are trying to ask", "you can pick a cuisine, such as indian, asian, Vegetarian.");
         }
-
-        var cardTitle = "Food Truck Names";
-        var cardContent = outputResult;
-        this.attributes['cuisineCustomerPicked'] = cuisineCustomerPicked;
-        this.attributes['repeatFoodTruckList'] = outputResult;
-        this.handler.state = states.TRUCKLISTMODE;
-        this.emit(':askWithCard', output, repromt_getTruckList, cardTitle, cardContent);
-
     },
     'getTruckLocationIntent': function() {
 
         //get food truck name
         var foodTruckName = this.event.request.intent.slots.foodTruckName.value;
+        if (foodTruckName == undefined){
+            this.emit(":ask", 'pleas pick a food truck name', "for example, you can ask where is it's bao time?");
+        }
         // var rawDate = this.event.request.intent.slots.date.value;
         // var date = new Date(Date.parse(rawDate));
-        console.log("food truck name");
-        console.log(foodTruckName);
-        // var rawDate = this.event.request.intent.slots.date.value;
-        // var customerDate;
-        // var actuarial_yy_mm_dd;
-        // if (rawDate) {
-        //     var date = new Date(Date.parse(rawDate));
-        //     if (date) {
-        //         customerDate = date.getDate();
-        //         actuarial_yy_mm_dd = date;
-        //     } else {
-        //         output = cannotFindLocation;
-        //         repromt_output = 'You can pick for another day.';
-        //         this.handler.state = states.TRUCKLOCATIONMODE;
-        //         this.emit(':ask', "Sorry, you date is invild, what about pick another date for the lovely food truck", repromt_output);
-        //     }
-        // } else {
-        //     var today = new Date();
-        //     customerDate = today.getDate();
-        //     console.log("current day: " + customerDate);
-        //     actuarial_yy_mm_dd = today;
-        // }
-        // console.log("current day: " + customerDate);
-        // console.log("food truck name: " + foodTruckName);
-        // console.log("raw date: " + rawDate);
-        // start to process the url.
-        var today = new Date();
-        customerDate = today.getDate();
+        if (totalValidFoodTrucks.indexOf(foodTruckName) >= 0){
+            console.log("food truck name");
+            console.log(foodTruckName);
 
-        getWebsiteInString(foodTruckName , (htmlPage) => {
-            // get location use regex directly
-            var regex_location = /class="simcal-event-address simcal-event-start-location" itemprop="location" itemscope itemtype="http:\/\/schema\.org\/Place">(.+)<\/span><\/em><\/p>/g;
-            var output;
-            var repromt_output;
+            var today = new Date();
+            customerDate = today.getDate();
+
+            getWebsiteInString(foodTruckName , (htmlPage) => {
+                // get location use regex directly
+                var regex_location = /class="simcal-event-address simcal-event-start-location" itemprop="location" itemscope itemtype="http:\/\/schema\.org\/Place">(.+)<\/span><\/em><\/p>/g;
+                var output;
+                var repromt_output;
 
 
-            ////// test "today" = timeInfo. Also timeInfo's formate is :"02". it's a string.
-            var locationInfo;
-            // var timeInfo_dd;
-            // var timeInfo_mm;
-            // var timeInfo_yy;
-            var foodTruckDate;
+                ////// test "today" = timeInfo. Also timeInfo's formate is :"02". it's a string.
+                var locationInfo;
+                // var timeInfo_dd;
+                // var timeInfo_mm;
+                // var timeInfo_yy;
+                var foodTruckDate;
 
 
-            locationInfo = regex_location.exec(htmlPage);
-            // timeInfo_dd = regex_date_dd.exec(htmlPage);
-            // timeInfo_mm = regex_date_mm.exec(htmlPage);
-            // timeInfo_yy = regex_date_yy.exec(htmlPage);
+                locationInfo = regex_location.exec(htmlPage);
+                // timeInfo_dd = regex_date_dd.exec(htmlPage);
+                // timeInfo_mm = regex_date_mm.exec(htmlPage);
+                // timeInfo_yy = regex_date_yy.exec(htmlPage);
 
-            console.log("location info: " + locationInfo);
-            console.log("customer date: " + customerDate);
-            console.log("food truck date: " + foodTruckDate);
+                console.log("location info: " + locationInfo);
+                console.log("customer date: " + customerDate);
+                console.log("food truck date: " + foodTruckDate);
 
-            if(locationInfo){
-                // foodTruckDate_dd = parseInt(timeInfo_dd[1]);
-                // foodTruckDate_mm = parseInt(timeInfo_mm[1]);
-                // foodTruckDate_yy = parseInt(timeInfo_yy[1]);
-                //
-                // var output_date = new Date(foodTruckDate_yy, foodTruckDate_mm, foodTruckDate_dd);
+                if(locationInfo){
+                    // foodTruckDate_dd = parseInt(timeInfo_dd[1]);
+                    // foodTruckDate_mm = parseInt(timeInfo_mm[1]);
+                    // foodTruckDate_yy = parseInt(timeInfo_yy[1]);
+                    //
+                    // var output_date = new Date(foodTruckDate_yy, foodTruckDate_mm, foodTruckDate_dd);
 
-                //console.log("locationInfo && (customerDate === foodTruckDate");
+                    //console.log("locationInfo && (customerDate === foodTruckDate");
 
-                // today's location
-                output = "The location for " + foodTruckName + "for today : " + locationInfo[1];
-                repromt_output = "The address also shows on your phone's Alexa app";
-                var cardTitle = foodTruckName + " Location";
-                var cardContent = locationInfo[1];
+                    // today's location
+                    output = "The location for " + foodTruckName + "for today : " + locationInfo[1];
+                    repromt_output = "The address also shows on your phone's Alexa app, do you want to pick another one?";
+                    var cardTitle = foodTruckName + " Location";
+                    var cardContent = locationInfo[1];
 
-                this.attributes['foodTruckName'] = foodTruckName;
-                this.attributes['forLocationRepeat'] = locationInfo[1];
-                this.handler.state = states.TRUCKLOCATIONMODE;
-                this.emit(':askWithCard', output, repromt_output, cardTitle, cardContent);
+                    this.attributes['foodTruckName'] = foodTruckName;
+                    this.attributes['forLocationRepeat'] = locationInfo[1];
+                    this.handler.state = states.TRUCKLOCATIONMODE;
+                    this.emit(':askWithCard', output, repromt_output, cardTitle, cardContent);
 
-            } else {
+                } else {
 
-                //console.log("locationInfo === 'undefined'");
-                output = cannotFindLocation;
-                repromt_output = 'You can pick another food truck.';
-                this.handler.state = states.TRUCKLOCATIONMODE;
-                this.emit(':ask', output, repromt_output);
-            }
+                    //console.log("locationInfo === 'undefined'");
+                    output = cannotFindLocation;
+                    repromt_output = 'You can pick another food truck.';
+                    this.handler.state = states.TRUCKLOCATIONMODE;
+                    this.emit(':ask', output, repromt_output);
+                }
 
 
-            // if it jump out of loop, means no dates are valid
-            // output = cannotFindLocation;
-            // repromt_output = 'You can pick another food truck.';
-            // console.log(this.handler);
-            // console.log(this.handler.state);
-            // this.handler.state = states.TRUCKLOCATIONMODE;
-            // this.emit(':ask', output, repromt_output);
+                // if it jump out of loop, means no dates are valid
+                // output = cannotFindLocation;
+                // repromt_output = 'You can pick another food truck.';
+                // console.log(this.handler);
+                // console.log(this.handler.state);
+                // this.handler.state = states.TRUCKLOCATIONMODE;
+                // this.emit(':ask', output, repromt_output);
 
-        });
+            });
+        }
+        else {
+            this.handler.state = states.TRUCKLOCATIONMODE;
+            var new_output = "Sorry, there isn't a food truck with name you picked in our system. Please find another one."
+            this.emit(':ask', new_output, new_output);
+        }
+
     },
     'AMAZON.StopIntent': function() {
         this.emit(':tell', goodbyeMessage);
@@ -339,9 +334,9 @@ var truckLocationHandlers = Alexa.CreateStateHandler(states.TRUCKLOCATIONMODE, {
             var cardContent = this.attributes['forLocationRepeat'];
             this.emit(':ask', output, repromt_output, cardTitle, cardContent);
         } else {
-            var output = "sorry, we cannot find the current location for the given food truck.";
-            var repromt_output = "Come on, don't play with me. Pick another one.";
-            this.emit(':ask', output, repromt_output);
+            var new_output = "sorry, we cannot find the current location for the given food truck.";
+            var new_repromt_output = "Come on, don't play with me. Pick another one.";
+            this.emit(':ask', new_output, new_repromt_output);
         }
     },
     'AMAZON.StopIntent': function() {
