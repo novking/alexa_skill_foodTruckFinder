@@ -11,7 +11,160 @@ const cuisineList = [
     'Burgers'
 ];
 
-const totalValidFoodTrucks = ['Falafel Salam', 'Now Make Me A Sandwich', 'Woodshop BBQ', 'Bread And Circuses', 'Caravan Crepes', "Dante's Inferno Dogs", 'Off The Rez', "Chick'n Fix", "It's Bao Time", 'BeezNeez Gourmet Sausages', 'I Love My GFF', "Delfino's Chicago Pizza", 'Bomba Fusion', 'NOSH', 'The Box On Wheels', 'Grilled Cheese Experience', 'Main Street Gyros', 'Where Ya At Matt?', 'Hungry Me', 'Taqueria Los Chilangos', 'Wicked Good Grinders', 'Anchor End Pretzel Shoppe', 'Skillet Street Food', 'Mesob At The Curb', "Sam Choy's Poke To The Max", 'Xplosive', 'Seattle Chicken Over Rice', 'Buddha Bruddah', "Tat's Truck", 'KC Deez BBQ', 'Yumbit', 'Snout and Co', 'Munch Boss', 'Cheese Wizards', 'Seattle Biscuit Company', 'NaanSense', 'Peasant Food Manifesto', 'Papa Bois', "Athena's"];
+// const totalValidFoodTrucks = ['Falafel Salam', 'Now Make Me A Sandwich', 'Woodshop BBQ', 'Bread And Circuses', 'Caravan Crepes', "Dante's Inferno Dogs", 'Off The Rez', "Chick'n Fix", "It's Bao Time", 'BeezNeez Gourmet Sausages', 'I Love My GFF', "Delfino's Chicago Pizza", 'Bomba Fusion', 'NOSH', 'The Box On Wheels', 'Grilled Cheese Experience', 'Main Street Gyros', 'Where Ya At Matt?', 'Hungry Me', 'Taqueria Los Chilangos', 'Wicked Good Grinders', 'Anchor End Pretzel Shoppe', 'Skillet Street Food', 'Mesob At The Curb', "Sam Choy's Poke To The Max", 'Xplosive', 'Seattle Chicken Over Rice', 'Buddha Bruddah', "Tat's Truck", 'KC Deez BBQ', 'Yumbit', 'Snout and Co', 'Munch Boss', 'Cheese Wizards', 'Seattle Biscuit Company', 'NaanSense', 'Peasant Food Manifesto', 'Papa Bois', "Athena's"];
+
+var totalValidFoodTrucks = [
+  "hometown dogs",
+"veg-wich",
+"spice on curve",
+"el cabrito oaxaca",
+"djung on wheels",
+"deen's banh mi",
+"now make me a sandwich",
+"caravan crepes",
+"street treats",
+"neema's comfort food",
+"delfino's chicago pizza",
+"wet buns",
+"tat's truck",
+"holo holo food truck",
+"off the rez",
+"made in taiwan",
+"nibbles food truck",
+"balleywood creamery",
+"napkin friends",
+"it's bao time",
+"my chef lynn",
+"the caveman food truck â closed",
+"curb jumper street eats",
+"hallava falafel",
+"carmelito's",
+"p&j's waffle delight",
+"plum burgers",
+"candy butcher hot dogs",
+"seattle chicken over rice",
+"chebogz filipino food truck",
+"yumbit",
+"roll ok please",
+"kabob n' kabob",
+"lumpia world",
+"pop-up bike pops",
+"athena's",
+"miniâ¦the dough-nut",
+"hot revolution donuts",
+"igloo rolls",
+"gourmini's",
+"maximus minimus",
+"galaxy donuts",
+"mo pockets",
+"cauldron",
+"seattle mamak",
+"bumbu truck",
+"das brat wagen",
+"fish basket",
+"tuscan stone wood fired pizza",
+"spicy papaya food truck",
+"thai-u-up",
+"i love my gff",
+"the peach and the pig",
+"bomba fusion",
+"wicked pies",
+"the box on wheels",
+"yummy box food truck",
+"kaosamai thai food truck",
+"anchor end pretzel shoppe",
+"raney brothers bbq",
+"jessica's unique bite",
+"street donuts",
+"stacks burgers",
+"chicago west",
+"express mexican grill",
+"picnic",
+"munch boss",
+"chopstix",
+"cheese wizards",
+"mobile mavens: gai box",
+"garden sushi",
+"the roll pod",
+"tabassum",
+"big boy's filipino food truck",
+"campfire bbq",
+"verita's coffee company",
+"the people's burger",
+"fire dog pizza company",
+"tacos la flaca",
+"gobble express",
+"taco time",
+"pompeii wood fired pizza",
+"macho burgers",
+"streetzeria autopompa",
+"jemil's big easy",
+"hb beverage company",
+"kc deez bbq",
+"sam choy's poke to the max",
+"where ya at matt?",
+"hungry me",
+"moonie icy tunes",
+"wicked good grinders",
+"the vet chef",
+"skillet street food",
+"314 pie",
+"don lucho's",
+"tummy yummy thai",
+"lil j's superdawgs",
+"buddha bruddah",
+"grilled cheese experience",
+"burgerphenia",
+"big house bbq",
+"main street gyros",
+"big dog's",
+"peasant food manifesto",
+"ezell's chicken express",
+"a fire inside wood fired pizza",
+"falafel salam",
+"dirty dog hot dog",
+"gogi on the go",
+"woodshop bbq",
+"buns on wheels",
+"word of mouth",
+"bread and circuses",
+"el camion",
+"crisp creperie",
+"seattle biscuit company",
+"stella fiore pizza",
+"ben & jerry's food truck",
+"my sweet lil cakes",
+"beezneez gourmet sausages",
+"mangia me",
+"lula salads",
+"nosh",
+"mobile mavens: lil' blu mobile bar",
+"dogfather catering",
+"dante's inferno dogs",
+"seoul kitchen",
+"taqueria los chilangos",
+"the mobile mayan",
+"marination mobile",
+"papa bois",
+"the ultimate melt",
+"people of the chubbs",
+"kiss my grits",
+"chick'n fix",
+"tacos el tajin",
+"xplosive",
+"mobile mavens: biscuit box",
+"the seattle barkery",
+"chewaya moroccan bbq",
+"snout and co",
+"delicatessen montanti",
+"naansense",
+"fruit chatter box",
+"beanfish",
+"kebab bros",
+"charlie's bun's n' stuff",
+"budha bear bagels",
+"seattle cookie counter",
+"mesob at the curb",]
 
 var FoodTruckLists = {
     "asianFoodTruckList": ["Chick'n Fix", "Munch Boss", "It's Bao Time", "Peasant Food Manifesto", "Bomba Fusion", "Xplosive", "The Box On Wheels", "Hungry Me", "Yumbit", "Buddha Bruddah"],
@@ -46,13 +199,14 @@ var startingStateHandlers = {
         this.emit(':ask', output, repromt_weclomeMessage);
     },
     'getCuisinesIntent': function() {
-        console.log(this.handler.state);
+        //console.log(this.handler.state);
 
         // console.log("get into 'getCuisinesIntent'");
         var cuisineListToString = cuisineList.toString();
         var styleNumber = cuisineList.length;
         var getCuisinesResPre = "There are " + styleNumber.toString() + " different food categories: ";
-        var output = getCuisinesResPre + cuisineListToString;
+        var just_for_certification = " You can chose from one cuisine from the list."
+        var output = getCuisinesResPre + cuisineListToString + just_for_certification;
         var cardTitle = "Cuisine";
         var cardContent = cuisineListToString;
 
@@ -61,7 +215,7 @@ var startingStateHandlers = {
         this.emit(':askWithCard', output, Repromt_getCuisine, cardTitle, cardContent);
     },
     'getTrucksListOfSameCuisineIntent': function() {
-        console.log(this.handler.state);
+        //console.log(this.handler.state);
 
         var cuisineSlot = this.event.request.intent.slots.cuisine.value;
         if (cuisineSlot == undefined){
@@ -81,15 +235,15 @@ var startingStateHandlers = {
                 repromt_getTruckList = "You can pick a food truck or get other cuisine food truck lists.";
 
                 if (targetFoodTruckList.length===1){
-                    output = "There is only " + targetFoodTruckList.length.toString() + " food truck gave us the valid address information. It called: " + outputResult;
+                    output = "There is only " + targetFoodTruckList.length.toString() + " food truck gave us the valid address information. It called: " + outputResult + " Do you want to know the location of the food truck?";
                 }
                 else{
-                    output = "There are only " + targetFoodTruckList.length.toString() + " food trucks gave us the valid address information. There are: " + outputResult;
+                    output = "There are only " + targetFoodTruckList.length.toString() + " food trucks gave us the valid address information. There are: " + outputResult + " Do you want to know the location of the food truck?";
                 }
             } else {
                 outputResult = targetFoodTruckList.slice(0, 3).toString();
                 this.attributes['numberOfFoodTrucksHasGiven'] = 3; // to track how many food trucks that has already been told to customer
-                output = "Food Trucks fit your taste are: " + outputResult;
+                output = "Food Trucks fit your taste are: " + outputResult + " Do you want to know the location of one of the food trucks? or you can say 'more' to get more food trucks choices";
                 repromt_getTruckList = "You can get more food truck list by saying:'Give me more food trucks info', or find out a food truck location by saying:'Where is your chonse food truck?'";
             }
 
@@ -108,6 +262,11 @@ var startingStateHandlers = {
 
         //get food truck name
         var foodTruckName = this.event.request.intent.slots.foodTruckName.value;
+        foodTruckName = foodTruckName.toLowerCase();
+        console.log("this is the input food truck name (raw): ", foodTruckName);
+
+        var test_result = totalValidFoodTrucks.indexOf(foodTruckName);
+        console.log("this is the result: ", test_result);
         if (foodTruckName == undefined){
             this.emit(":ask", 'pleas pick a food truck name', "for example, you can ask where is it's bao time?");
         }
@@ -154,7 +313,7 @@ var startingStateHandlers = {
                     //console.log("locationInfo && (customerDate === foodTruckDate");
 
                     // today's location
-                    output = "The location for " + foodTruckName + "for today : " + locationInfo[1];
+                    output = "The location for " + foodTruckName + "for today : " + locationInfo[1] + " You can say stop to end the session, or pick another food truck, i will give you the location";
                     repromt_output = "The address also shows on your phone's Alexa app, do you want to pick another one?";
                     var cardTitle = foodTruckName + " Location";
                     var cardContent = locationInfo[1];
@@ -200,6 +359,10 @@ var startingStateHandlers = {
     'SessionEndedRequest': function() {
         this.emit('AMAZON.StopIntent');
     },
+    'AMAZON.HelpIntent': function () {
+        var help_output = "you can say:' give me the cuisine list' to get the cuisine list in the system, or saying for a particular cuisine style by saying: 'give me a list of Asian food trucks.'";
+        this.emit(":ask", help_output, help_output);
+    },
     'Unhandled': function() {
         this.emit(':ask', helpMessage, helpMessage);
     },
@@ -224,6 +387,10 @@ var cuisinesHandlers = Alexa.CreateStateHandler(states.CUISINESMODE, {
     'AMAZON.RepeatIntent': function() {
         this.emit('getCuisinesIntent');
     },
+    'AMAZON.HelpIntent': function () {
+        var help_output1 = "you can ask pick from one the the cuisine from the list you just heard";
+        this.emit(':ask', help_output1, help_output1);
+    },
     'AMAZON.StopIntent': function() {
         this.emit(':tell', goodbyeMessage);
     },
@@ -240,19 +407,19 @@ var cuisinesHandlers = Alexa.CreateStateHandler(states.CUISINESMODE, {
 
 var truckListHandlers = Alexa.CreateStateHandler(states.TRUCKLISTMODE, {
     'getCuisinesIntent': function() {
-        console.log(this.handler.state);
+        //console.log(this.handler.state);
         this.handler.state = '';
         this.emitWithState('getCuisinesIntent');
     },
 
     'getTrucksListOfSameCuisineIntent': function() {
-        console.log(this.handler.state);
+        //console.log(this.handler.state);
         this.handler.state = '';
         this.emitWithState('getTrucksListOfSameCuisineIntent');
     },
 
     'getMoreFoodTrucksIntent': function() {
-        console.log(this.handler.state);
+        //console.log(this.handler.state);
         var cuisineCustomerPicked = this.attributes['cuisineCustomerPicked'];
         var targetFoodTruckList = FoodTruckLists[cuisineCustomerPicked];
         var start = this.attributes['numberOfFoodTrucksHasGiven'];
@@ -294,6 +461,10 @@ var truckListHandlers = Alexa.CreateStateHandler(states.TRUCKLISTMODE, {
         else {
             this.emit(':ask', "there is nothing to repeat. Please ask for a food truck location first", "there is nothing to repeat. Please ask for a food truck location first");
         }
+    },
+    'AMAZON.HelpIntent': function () {
+        var help_help_output = 'you can ask for more food truk, or pick one from what you just heard.'
+        this.emit(':ask', help_help_output, help_help_output);
     },
     'AMAZON.StopIntent': function() {
         this.emit(':tell', goodbyeMessage);
@@ -348,6 +519,10 @@ var truckLocationHandlers = Alexa.CreateStateHandler(states.TRUCKLOCATIONMODE, {
     'SessionEndedRequest': function() {
         this.emit('AMAZON.StopIntent');
     },
+    'AMAZON.HelpIntent': function () {
+        var help_output2 = "You can pick another food truck location, or say stop to quit.";
+        this.emit(':ask', help_output2, help_output2);
+    },
     'Unhandled': function() {
         this.emit('Unhandled');
     },
@@ -356,8 +531,10 @@ var truckLocationHandlers = Alexa.CreateStateHandler(states.TRUCKLOCATIONMODE, {
 
 function getWebsiteInString(foodTruckName, eventCallback) {
     var corrected_foodTruckName = foodTruckName.replace(/\'/g, "").toLowerCase().replace(/ /g, '-');
+    console.log("this is the food truck name: ", foodTruckName);
+    console.log("this is the corrected food truck name: ", corrected_foodTruckName);
     var url = 'http://www.seattlefoodtruck.com/food-trucks/' + corrected_foodTruckName;
-    //console.log(url)
+    console.log("this is the url: ", url);
     http.get(url, function(res) {
         var body = '';
 
