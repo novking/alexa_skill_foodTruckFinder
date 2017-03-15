@@ -262,14 +262,15 @@ var startingStateHandlers = {
 
         //get food truck name
         var foodTruckName = this.event.request.intent.slots.foodTruckName.value;
+        if (foodTruckName == undefined){
+            this.emit(":ask", 'pleas pick a food truck name', "for example, you can ask where is it's bao time?");
+        }
         foodTruckName = foodTruckName.toLowerCase();
         console.log("this is the input food truck name (raw): ", foodTruckName);
 
         var test_result = totalValidFoodTrucks.indexOf(foodTruckName);
         console.log("this is the result: ", test_result);
-        if (foodTruckName == undefined){
-            this.emit(":ask", 'pleas pick a food truck name', "for example, you can ask where is it's bao time?");
-        }
+
         // var rawDate = this.event.request.intent.slots.date.value;
         // var date = new Date(Date.parse(rawDate));
         if (totalValidFoodTrucks.indexOf(foodTruckName) >= 0){
